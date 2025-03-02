@@ -6,10 +6,10 @@ export default function AboutMe() {
     <div className="md:flex md:items-center md:justify-center min-h-[calc(100vh-12rem)]">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-16">
-          Hi, I'm Mayank
+          Hi, I&apos;m Mayank
         </h1>
         <p className="text-lg text-gray-600 mb-32">
-          I'm a seasoned developer with a proven track record of successfully delivering high-quality mobile and Web applications using Flutter. My web development skills are not only limited to Flutter, I can leverage technologies like ReactJS to create engaging user interfaces. I'm also proficient in designing and building robust APIs with FastAPI, leading teams in implementing these technologies for optimized solutions. Let's collaborate to bring your vision to life.
+          I&apos;m a seasoned developer with a proven track record of successfully delivering high-quality mobile and Web applications using Flutter. My web development skills are not only limited to Flutter, I can leverage technologies like ReactJS to create engaging user interfaces. I&apos;m also proficient in designing and building robust APIs with FastAPI, leading teams in implementing these technologies for optimized solutions. Let&apos;s collaborate to bring your vision to life.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
