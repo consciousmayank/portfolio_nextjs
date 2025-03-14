@@ -26,11 +26,11 @@ export default function ContactMe() {
       <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">Contact Me</h2>
       
       <div className="grid md:grid-cols-2 gap-12">
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="dark:bg-gray-900 rounded-lg shadow-lg p-8">
           <h3 className="text-2xl font-semibold mb-6">Get in Touch</h3>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-100 mb-1">
                 Name
               </label>
               <input
@@ -45,7 +45,7 @@ export default function ContactMe() {
             </div>
             
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-100 mb-1">
                 Email
               </label>
               <input
@@ -60,7 +60,7 @@ export default function ContactMe() {
             </div>
             
             <div>
-              <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="reason" className="block text-sm font-medium text-gray-100 mb-1">
                 Reason for Contact
               </label>
               <textarea
@@ -83,32 +83,32 @@ export default function ContactMe() {
           </form>
         </div>
         
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="dark:bg-gray-900 rounded-lg shadow-lg p-8">
           <h3 className="text-2xl font-semibold mb-6">Connect With Me</h3>
           <div className="space-y-6">
             <a
-              href="https://linkedin.com/in/yourprofile"
+              href="https://www.linkedin.com/in/mayank-joshi-2797b773/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center text-gray-700 hover:text-blue-600 transition-colors duration-200"
+              className="flex items-center text-gray-100 hover:text-blue-600 transition-colors duration-200"
             >
               <Linkedin className="w-6 h-6 mr-3" />
               <span>LinkedIn Profile</span>
             </a>
             
             <a
-              href="https://github.com/yourusername"
+              href="https://github.com/consciousmayank"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-200"
+              className="flex items-center text-gray-100 hover:text-amber-900 transition-colors duration-200"
             >
               <Github className="w-6 h-6 mr-3" />
               <span>GitHub Profile</span>
             </a>
             
             <a
-              href="mailto:your.email@example.com"
-              className="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+              href="mailto:consciousmayank@gmail.com"
+              className="flex items-center text-gray-100 hover:text-green-600 transition-colors duration-200"
             >
               <Mail className="w-6 h-6 mr-3" />
               <span>Email Me</span>

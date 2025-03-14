@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Option 1: Using JSON for array storage
+model ProjectInfo {
+  id                Int      @id @default(autoincrement())
+  title             String
+  description       String
+  technologiesUsed  Json    
+  role              String
+  links             Json
+  image             String
+}
+
+model ContactInfo {
+  id                Int      @id @default(autoincrement())
+  name              String
+  emailId           String
+  phno              String
+  requirement       String
+}
+
+model ConnectWithMe {
+  id                Int      @id @default(autoincrement())
+  connectHandles    Json    
+  emailId           String
+  
+}
