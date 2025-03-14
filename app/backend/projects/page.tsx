@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProjectInfo } from '../../classes/ProjectInfo';
-import { PROJECTS_API_URL } from '@/app/api/api_constants';
+import { PROJECTS_API_URL, PROJECT_API_URL } from '@/app/api/api_constants';
 
 
 export default function ProjectsManagement() {
@@ -155,7 +155,7 @@ export default function ProjectsManagement() {
         });
       } else if (isEditing && currentProject) {
         // Update existing project
-        response = await fetch(`${PROJECTS_API_URL}/${dataToSubmit.id}`, {
+        response = await fetch(PROJECT_API_URL(dataToSubmit.id), {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ export default function ProjectsManagement() {
     }
     
     try {
-      const response = await fetch(`${PROJECTS_API_URL}/${id}`, {
+      const response = await fetch(PROJECT_API_URL(id), {
         method: 'DELETE',
       });
       

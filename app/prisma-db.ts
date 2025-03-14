@@ -4,33 +4,33 @@ const prisma = new PrismaClient()
 
 export default prisma
 
-const seedProjects = async () => {
-    const projectsCount = await prisma.projectInfo.count()
-    if (projectsCount > 0) return
+// const seedProjects = async () => {
+//     const projectsCount = await prisma.projectInfo.count()
+//     if (projectsCount > 0) return
 
-    await prisma.projectInfo.createMany({
-        data: [
-            {
-                title: 'Project 1',
-                description: 'Description 1',
-                role: 'Role 1',
-                links: ['https://example.com'],
-                technologiesUsed: ['Technology 1', 'Technology 2'],
-                image: 'https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU'
-            },
-            {
-                title: 'Project 2',
-                description: 'Description 2',
-                role: 'Role 2',
-                links: ['https://example.com'],
-                technologiesUsed: ['Technology 3', 'Technology 4'],
-                image: 'https://fastly.picsum.photos/id/11/2500/1667.jpg?hmac=xxjFJtAPgshYkysU_aqx2sZir-kIOjNR9vx0te7GycQ'
-            }
-        ]
-    })
-}
+//     await prisma.projectInfo.createMany({
+//         data: [
+//             {
+//                 title: 'Project 1',
+//                 description: 'Description 1',
+//                 role: 'Role 1',
+//                 links: ['https://example.com'],
+//                 technologiesUsed: ['Technology 1', 'Technology 2'],
+//                 image: 'https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU'
+//             },
+//             {
+//                 title: 'Project 2',
+//                 description: 'Description 2',
+//                 role: 'Role 2',
+//                 links: ['https://example.com'],
+//                 technologiesUsed: ['Technology 3', 'Technology 4'],
+//                 image: 'https://fastly.picsum.photos/id/11/2500/1667.jpg?hmac=xxjFJtAPgshYkysU_aqx2sZir-kIOjNR9vx0te7GycQ'
+//             }
+//         ]
+//     })
+// }
 
-seedProjects()
+// seedProjects()
 
 
 // CRUD operations for ProjectInfo
