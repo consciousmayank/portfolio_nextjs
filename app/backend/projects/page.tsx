@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ProjectInfo } from "../../classes/ProjectInfo";
-import { PROJECTS_API_URL, PROJECT_API_URL } from "@/app/api/api_constants";
+import { PROJECT_API_URL } from "@/app/api/api_constants";
 import { NextResponse } from "next/server";
 
 export default function ProjectsManagement() {
@@ -33,7 +33,7 @@ export default function ProjectsManagement() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(PROJECTS_API_URL);
+      const response = await fetch('api/v1/projects');
       if (!response.ok) {
         throw new Error("Failed to fetch projects in projects page");
       }
@@ -43,13 +43,13 @@ export default function ProjectsManagement() {
     } catch (err) {
       console.error("Error fetching projects:", err);
       setError(
-        "Database connection failed " + PROJECTS_API_URL,
+        "Database connection failed " + 'api/v1/projects',
       );
       const errorMessage =
         err instanceof Error ? err.message : "Unknown database error";
       return NextResponse.json(
         {
-          error: "Database connection failed " + PROJECTS_API_URL,
+          error: "Database connection failed " + 'api/v1/projects',
           message: errorMessage,
         },
         { status: 500 }
@@ -164,7 +164,7 @@ export default function ProjectsManagement() {
 
       if (isCreating) {
         // Create new project
-        response = await fetch(PROJECTS_API_URL, {
+        response = await fetch('api/v1/projects', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
