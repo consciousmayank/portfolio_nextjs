@@ -40,7 +40,7 @@ export default function ProjectsManagement() {
       setProjects(projectsList);
     } catch (err) {
       console.error('Error fetching projects:', err);
-      setError('Failed to load projects. Please try again.');
+      setError('Failed to load projects. Please try again. Error in projects page. Error: ' + err);
     } finally {
       setLoading(false);
     }
