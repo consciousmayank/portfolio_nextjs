@@ -22,9 +22,10 @@ export async function GET() {
     
     return NextResponse.json(projects, { status: 200 });
   } catch (error) {
-    console.error("Error fetching projects:", error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown database error';
+    console.error("Error fetching projects:", errorMessage);
     return NextResponse.json(
-      { error: "Failed to fetch projects in api" },
+      { error: "Api Error has come in projects route", message: errorMessage },
       { status: 500 }
     );
   }
