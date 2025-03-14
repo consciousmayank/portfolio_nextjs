@@ -7,7 +7,7 @@ export default function AboutMe() {
           <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">
             About Me
           </h2>
-          <div className="prose dark:prose-invert max-w-3xl mx-auto p-4">
+          <div className="mt-4 text-xl text-gray-600 dark:text-gray-300">
             <p>
               I&apos;m a seasoned developer with a proven track record of
               successfully delivering high-quality mobile and Web applications

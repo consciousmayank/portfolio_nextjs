@@ -1,27 +1,7 @@
 import AboutMe from "./components/AboutMe";
 import ContactMe from "./components/ContactMe";
 import Navbar from "./components_/navbar";
-// import Link from "next/link";
 import Projects from "./components_/projects";
-
-// Create a client wrapper for the Projects server component
-// const ProjectsWrapper = () => {
-//   return (
-//     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-//       <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">
-//         Projects
-//       </h2>
-//       <div className="text-center">
-//         <Link 
-//           href="/projects" 
-//           className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-300"
-//         >
-//           View My Projects
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// };
 
 export default function Home() {
   return (
@@ -29,13 +9,16 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <section
+        id="name"
+        className="h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900"
+      >
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-white">
             Hi, I&apos;m Mayank
           </h1>
           <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
-            Mobile Applications & Web Developer
+            Android Native, Flutter Applications & Web Developer
           </p>
         </div>
       </section>
@@ -52,19 +35,41 @@ export default function Home() {
       </section>
 
       {/* Resume Section */}
-      <section id="resume" className="py-20 bg-white dark:bg-gray-800">
+      {/* <section id="resume" className="py-20 bg-white dark:bg-gray-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">
             Resume
           </h2>
-          <div className="prose dark:prose-invert max-w-3xl mx-auto">
-            <p>Professional experience and education details would go here.</p>
+          
+          <div className="text-center mb-10">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+              Click on &quot;Resume&quot; in the navigation bar to view my full resume in a convenient modal view.
+            </p>
+            
+            <div className="flex justify-center gap-4">
+              <a
+                href="https://docs.google.com/document/d/1oIW7Ltbj2bfX01n6lQS0j0Z9hWFdKIvsRTKxaxD3yAU/view"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-300"
+              >
+                View Full Resume
+              </a>
+              <a
+                href="https://docs.google.com/document/d/1oIW7Ltbj2bfX01n6lQS0j0Z9hWFdKIvsRTKxaxD3yAU/export?format=pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-300"
+              >
+                Download PDF
+              </a>
+            </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 bg-gray-50 dark:bg-gray-900">
+      {/* <section id="skills" className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">
             Skills
@@ -96,67 +101,33 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-white dark:bg-gray-800">
-        <ContactMe/>
-        {/* <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">
-            Hire Me
-          </h2>
-          <div className="max-w-lg mx-auto">
-            <form className="space-y-4">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                ></textarea>
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >
-                  Send Message
-                </button>
-              </div>
-            </form>
-          </div>
-        </div> */}
+        <p
+          className="
+        max-w-6xl 
+        mx-auto 
+        px-4 
+        sm:px-6 
+        lg:px-8 
+        mt-4 
+        text-xl 
+        text-gray-600 
+        dark:text-gray-300 
+        flex 
+        text-justify
+        mb-10
+        "
+        >
+          I&apos;m currently looking for full-time Mobile Applications or Web
+          Development opportunities!, preferably with Work From Home or Hybrid
+          options. If you know of any positions available, if you have any
+          questions, or if you just want to say hi, just use the form below. Or
+          you can also contact me on my social media platforms.
+        </p>
+        {<ContactMe />}
       </section>
 
       {/* Footer */}

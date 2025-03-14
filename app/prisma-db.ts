@@ -25,22 +25,6 @@ const seedProjects = async () => {
                 links: ['https://example.com'],
                 technologiesUsed: ['Technology 3', 'Technology 4'],
                 image: 'https://fastly.picsum.photos/id/11/2500/1667.jpg?hmac=xxjFJtAPgshYkysU_aqx2sZir-kIOjNR9vx0te7GycQ'
-            },
-            {
-                title: 'Project 3',
-                description: 'Description 3',
-                role: 'Role 3',
-                links: ['https://example.com'],
-                technologiesUsed: ['Technology 5', 'Technology 6'],
-                image: 'https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY'
-            },
-            {
-                title: 'Project 4',
-                description: 'Description 4',
-                role: 'Role 4',
-                links: ['https://example.com'],
-                technologiesUsed: ['Technology 7', 'Technology 8'],
-                image: 'https://fastly.picsum.photos/id/22/4434/3729.jpg?hmac=fjZdkSMZJNFgsoDh8Qo5zdA_nSGUAWvKLyyqmEt2xs0'
             }
         ]
     })

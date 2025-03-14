@@ -24,11 +24,11 @@ export default function ContactMe() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">Contact Me</h2>
+      <h4 className="text-3xl font-bold text-gray-100 mb-8 text-center">Get In Touch</h4>
       
       <div className="grid md:grid-cols-2 gap-12">
         <div className="dark:bg-gray-900 rounded-lg shadow-lg p-8">
-          <h3 className="text-2xl font-semibold mb-6">Get in Touch</h3>
+          <h3 className="text-2xl font-semibold mb-6">Contact Me</h3>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-100 mb-1">

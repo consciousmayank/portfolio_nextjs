@@ -47,7 +47,7 @@ export default async function Projects() {
                       {project.technologiesUsed.map((tech) => (
                         <span
                           key={String(tech)}
-                          className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm mr-2 mb-2 inline-block pl-1 pr-1"
+                          className="px-6 py-1 bg-blue-100 text-blue-600 rounded-full text-sm mr-2 mb-2 inline-block pl-4 pr-4"
                         >
                           {String(tech)}
                         </span>
@@ -72,7 +72,7 @@ export default async function Projects() {
                       {project.links.map((tech) => (
                         <span
                           key={String(tech)}
-                          className="px-3 py-1 bg-green-100 text-black rounded-full text-sm mr-2 mb-2 inline-block pl-1 pr-1"
+                          className="px-3 py-1 bg-green-100 text-black rounded-full text-sm mr-2 mb-2 inline-block pl-4 pr-4"
                         >
                           <Link className="w-4 h-4" href={String(tech)} target="_blank">
                             {String(tech)}

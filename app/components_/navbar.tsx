@@ -7,11 +7,10 @@ const Navbar = () => {
   const pathname = usePathname();
 
   const navItems = [
-    { name: 'About Me', path: '#about' },
-    { name: 'Projects', path: '#projects' },
-    { name: 'Resume', path: '#resume' },
-    { name: 'Skills', path: '#skills' },
-    { name: 'Hire Me', path: '#contact' },
+    { name: 'About Me', path: '#about', type: 'scroll' },
+    { name: 'Projects', path: '#projects', type: 'scroll' },
+    { name: 'Resume', path: '#resume', type: 'modal' },
+    { name: 'Hire Me', path: '#contact', type: 'scroll' },
   ];
 
   return (
