@@ -50,8 +50,6 @@ type ProjectUpdateInput = Partial<ProjectCreateInput>
 // Create a new project
 export const createProject = async (input: ProjectCreateInput): Promise<ProjectInfo> => {
     console.log('Creating project:', input)
-    // 2 seconds delay
-    await new Promise(resolve => setTimeout(resolve, 2000))
     return await prisma.projectInfo.create({
         data: {
             title: input.title,
@@ -67,16 +65,12 @@ export const createProject = async (input: ProjectCreateInput): Promise<ProjectI
 // Read all projects
 export const getAllProjects = async (): Promise<ProjectInfo[]> => {
     console.log('Getting all projects')
-    // 2 seconds delay
-    await new Promise(resolve => setTimeout(resolve, 2000))
     return await prisma.projectInfo.findMany()
 }
 
 // Read single project by id
 export const getProjectById = async (id: number): Promise<ProjectInfo | null> => {
     console.log('Getting project by id:', id)
-    // 2 seconds delay
-    await new Promise(resolve => setTimeout(resolve, 2000))
     return await prisma.projectInfo.findUnique({
         where: {
             id
@@ -90,8 +84,6 @@ export const updateProject = async (
     data: ProjectUpdateInput
 ): Promise<ProjectInfo> => {
     console.log('Updating project with id:', id)
-    // 2 seconds delay
-    await new Promise(resolve => setTimeout(resolve, 2000))
     const updateData: Partial<Record<keyof ProjectInfo, unknown>> = {...data}
     if (data.links) {
         updateData.links = JSON.stringify(data.links)
@@ -111,8 +103,6 @@ export const updateProject = async (
 // Delete project
 export const deleteProject = async (id: number): Promise<ProjectInfo> => {
     console.log('Deleting project with id:', id)
-    // 2 seconds delay
-    await new Promise(resolve => setTimeout(resolve, 2000))
     return await prisma.projectInfo.delete({
         where: {
             id

@@ -1,31 +1,33 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { ProjectInfo } from '../../classes/ProjectInfo';
-import { PROJECTS_API_URL, PROJECT_API_URL } from '@/app/api/api_constants';
-
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ProjectInfo } from "../../classes/ProjectInfo";
+import { PROJECTS_API_URL, PROJECT_API_URL } from "@/app/api/api_constants";
+import { NextResponse } from "next/server";
 
 export default function ProjectsManagement() {
   const router = useRouter();
   const [projects, setProjects] = useState<ProjectInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // For edit/create form
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [currentProject, setCurrentProject] = useState<ProjectInfo | null>(null);
+  const [currentProject, setCurrentProject] = useState<ProjectInfo | null>(
+    null
+  );
   const [formData, setFormData] = useState({
     id: 0,
-    title: '',
-    description: '',
-    role: '',
-    links: [''],
-    technologiesUsed: [''],
-    image: ''
+    title: "",
+    description: "",
+    role: "",
+    links: [""],
+    technologiesUsed: [""],
+    image: "",
   });
-  
+
   // Fetch projects
   const fetchProjects = async () => {
     setLoading(true);
@@ -33,56 +35,72 @@ export default function ProjectsManagement() {
     try {
       const response = await fetch(PROJECTS_API_URL);
       if (!response.ok) {
-        throw new Error('Failed to fetch projects in projects page');
+        throw new Error("Failed to fetch projects in projects page");
       }
-      const data = await response.json() as Record<string, unknown>[];
-      const projectsList = data.map(item => ProjectInfo.fromJSON(item));
+      const data = (await response.json()) as Record<string, unknown>[];
+      const projectsList = data.map((item) => ProjectInfo.fromJSON(item));
       setProjects(projectsList);
     } catch (err) {
-      console.error('Error fetching projects:', err);
-      setError('Failed to load projects. Please try again. Error in projects page. Error: ' + err);
+      console.error("Error fetching projects:", err);
+      setError(
+        "Database connection failed " + PROJECTS_API_URL,
+      );
+      const errorMessage =
+        err instanceof Error ? err.message : "Unknown database error";
+      return NextResponse.json(
+        {
+          error: "Database connection failed " + PROJECTS_API_URL,
+          message: errorMessage,
+        },
+        { status: 500 }
+      );
     } finally {
       setLoading(false);
     }
   };
-  
+
   // Load projects on component mount
   useEffect(() => {
     fetchProjects();
   }, []);
-  
+
   // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  
+
   // Handle array input changes (links, technologies)
   const handleArrayInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>, 
-    field: 'links' | 'technologiesUsed', 
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: "links" | "technologiesUsed",
     index: number
   ) => {
     const newArray = [...formData[field]];
     newArray[index] = e.target.value;
     setFormData({ ...formData, [field]: newArray });
   };
-  
+
   // Add new item to an array field
-  const addArrayItem = (field: 'links' | 'technologiesUsed') => {
+  const addArrayItem = (field: "links" | "technologiesUsed") => {
     setFormData({
       ...formData,
-      [field]: [...formData[field], '']
+      [field]: [...formData[field], ""],
     });
   };
-  
+
   // Remove item from an array field
-  const removeArrayItem = (field: 'links' | 'technologiesUsed', index: number) => {
+  const removeArrayItem = (
+    field: "links" | "technologiesUsed",
+    index: number
+  ) => {
     const newArray = [...formData[field]];
     newArray.splice(index, 1);
     setFormData({ ...formData, [field]: newArray });
   };
-  
+
   // Start editing a project
   const startEditing = (project: ProjectInfo) => {
     setCurrentProject(project);
@@ -93,123 +111,125 @@ export default function ProjectsManagement() {
       role: project.role,
       links: [...project.links],
       technologiesUsed: [...project.technologiesUsed],
-      image: project.image
+      image: project.image,
     });
     setIsEditing(true);
     setIsCreating(false);
   };
-  
+
   // Start creating a new project
   const startCreating = () => {
     setCurrentProject(null);
     setFormData({
       id: 0, // Will be assigned by the database
-      title: '',
-      description: '',
-      role: '',
-      links: [''],
-      technologiesUsed: [''],
-      image: ''
+      title: "",
+      description: "",
+      role: "",
+      links: [""],
+      technologiesUsed: [""],
+      image: "",
     });
     setIsCreating(true);
     setIsEditing(false);
   };
-  
+
   // Cancel editing/creating
   const cancelForm = () => {
     setIsEditing(false);
     setIsCreating(false);
     setCurrentProject(null);
   };
-  
+
   // Submit the form (create or update)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    
+    setError("");
+
     try {
       // Make sure technologiesUsed and links are properly formatted
       const dataToSubmit = {
         ...formData,
         // Ensure these are arrays, not objects or malformed data
-        technologiesUsed: Array.isArray(formData.technologiesUsed) 
-          ? formData.technologiesUsed.filter(Boolean) 
+        technologiesUsed: Array.isArray(formData.technologiesUsed)
+          ? formData.technologiesUsed.filter(Boolean)
           : [],
-        links: Array.isArray(formData.links) 
-          ? formData.links.filter(Boolean) 
-          : []
+        links: Array.isArray(formData.links)
+          ? formData.links.filter(Boolean)
+          : [],
       };
-      
-      console.log('Submitting data:', dataToSubmit);
-      
+
+      console.log("Submitting data:", dataToSubmit);
+
       let response;
-      
+
       if (isCreating) {
         // Create new project
         response = await fetch(PROJECTS_API_URL, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(dataToSubmit),
         });
       } else if (isEditing && currentProject) {
         // Update existing project
         response = await fetch(PROJECT_API_URL(dataToSubmit.id), {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(dataToSubmit),
         });
       }
-      
+
       if (!response) {
-        throw new Error('No response from server');
+        throw new Error("No response from server");
       }
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
-        console.error('Server response:', response.status, errorData);
+        console.error("Server response:", response.status, errorData);
         throw new Error(errorData?.error || `Server error: ${response.status}`);
       }
-      
+
       // Refresh the project list
       await fetchProjects();
-      
+
       // Reset form state
       cancelForm();
-      
     } catch (err) {
-      console.error('Error saving project:', err);
-      setError(`Failed to save project: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      console.error("Error saving project:", err);
+      setError(
+        `Failed to save project: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
     }
   };
-  
+
   // Delete a project
   const deleteProject = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this project?')) {
+    if (!window.confirm("Are you sure you want to delete this project?")) {
       return;
     }
-    
+
     try {
       const response = await fetch(PROJECT_API_URL(id), {
-        method: 'DELETE',
+        method: "DELETE",
       });
-      
+
       if (!response.ok) {
-        throw new Error('Failed to delete project');
+        throw new Error("Failed to delete project");
       }
-      
+
       // Refresh the project list
       await fetchProjects();
-      
     } catch (err) {
-      console.error('Error deleting project:', err);
-      setError('Failed to delete project. Please try again.');
+      console.error("Error deleting project:", err);
+      setError("Failed to delete project. Please try again.");
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white p-8">
       <div className="max-w-6xl mx-auto">
@@ -217,7 +237,7 @@ export default function ProjectsManagement() {
           <h1 className="text-3xl font-bold">Projects Management</h1>
           <div className="flex space-x-4">
             <button
-              onClick={() => router.push('/backend')}
+              onClick={() => router.push("/backend")}
               className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors duration-300"
             >
               Back to Dashboard
@@ -232,11 +252,11 @@ export default function ProjectsManagement() {
             )}
           </div>
         </div>
-        
+
         {error && (
           <div className="bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 p-4 rounded-md mb-6">
             {error}
-            <button 
+            <button
               className="ml-2 text-red-500 hover:text-red-700 dark:text-red-300 dark:hover:text-red-100"
               onClick={() => setError(null)}
             >
@@ -244,14 +264,14 @@ export default function ProjectsManagement() {
             </button>
           </div>
         )}
-        
+
         {/* Project Form (Edit/Create) */}
         {(isEditing || isCreating) && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
             <h2 className="text-2xl font-bold mb-6">
-              {isCreating ? 'Create New Project' : 'Edit Project'}
+              {isCreating ? "Create New Project" : "Edit Project"}
             </h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Title */}
               <div>
@@ -267,7 +287,7 @@ export default function ProjectsManagement() {
                   required
                 />
               </div>
-              
+
               {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -282,7 +302,7 @@ export default function ProjectsManagement() {
                   required
                 />
               </div>
-              
+
               {/* Role */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -297,7 +317,7 @@ export default function ProjectsManagement() {
                   required
                 />
               </div>
-              
+
               {/* Image URL */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -311,7 +331,7 @@ export default function ProjectsManagement() {
                   className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                 />
               </div>
-              
+
               {/* Technologies Used */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -322,13 +342,15 @@ export default function ProjectsManagement() {
                     <input
                       type="text"
                       value={tech}
-                      onChange={(e) => handleArrayInputChange(e, 'technologiesUsed', index)}
+                      onChange={(e) =>
+                        handleArrayInputChange(e, "technologiesUsed", index)
+                      }
                       className="flex-grow p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                       placeholder="e.g., React, Next.js, Tailwind"
                     />
                     <button
                       type="button"
-                      onClick={() => removeArrayItem('technologiesUsed', index)}
+                      onClick={() => removeArrayItem("technologiesUsed", index)}
                       className="ml-2 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md"
                       disabled={formData.technologiesUsed.length <= 1}
                     >
@@ -338,13 +360,13 @@ export default function ProjectsManagement() {
                 ))}
                 <button
                   type="button"
-                  onClick={() => addArrayItem('technologiesUsed')}
+                  onClick={() => addArrayItem("technologiesUsed")}
                   className="mt-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm"
                 >
                   Add Technology
                 </button>
               </div>
-              
+
               {/* Links */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -355,13 +377,15 @@ export default function ProjectsManagement() {
                     <input
                       type="url"
                       value={link}
-                      onChange={(e) => handleArrayInputChange(e, 'links', index)}
+                      onChange={(e) =>
+                        handleArrayInputChange(e, "links", index)
+                      }
                       className="flex-grow p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
                       placeholder="https://example.com"
                     />
                     <button
                       type="button"
-                      onClick={() => removeArrayItem('links', index)}
+                      onClick={() => removeArrayItem("links", index)}
                       className="ml-2 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md"
                       disabled={formData.links.length <= 1}
                     >
@@ -371,13 +395,13 @@ export default function ProjectsManagement() {
                 ))}
                 <button
                   type="button"
-                  onClick={() => addArrayItem('links')}
+                  onClick={() => addArrayItem("links")}
                   className="mt-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm"
                 >
                   Add Link
                 </button>
               </div>
-              
+
               {/* Form Actions */}
               <div className="flex justify-end space-x-4 pt-4">
                 <button
@@ -391,13 +415,13 @@ export default function ProjectsManagement() {
                   type="submit"
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
                 >
-                  {isCreating ? 'Create Project' : 'Update Project'}
+                  {isCreating ? "Create Project" : "Update Project"}
                 </button>
               </div>
             </form>
           </div>
         )}
-        
+
         {/* Projects List */}
         {!isEditing && !isCreating && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -421,13 +445,19 @@ export default function ProjectsManagement() {
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {loading ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                    <td
+                      colSpan={4}
+                      className="px-6 py-4 text-center text-gray-500 dark:text-gray-400"
+                    >
                       Loading projects...
                     </td>
                   </tr>
                 ) : projects.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                    <td
+                      colSpan={4}
+                      className="px-6 py-4 text-center text-gray-500 dark:text-gray-400"
+                    >
                       No projects found. Add your first project!
                     </td>
                   </tr>
@@ -435,16 +465,20 @@ export default function ProjectsManagement() {
                   projects.map((project) => (
                     <tr key={project.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">{project.title}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {project.title}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{project.role}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {project.role}
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-wrap gap-1">
                           {project.technologiesUsed.map((tech, index) => (
-                            <span 
-                              key={index} 
+                            <span
+                              key={index}
                               className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full text-xs"
                             >
                               {tech}
@@ -476,4 +510,4 @@ export default function ProjectsManagement() {
       </div>
     </div>
   );
-} 
+}
