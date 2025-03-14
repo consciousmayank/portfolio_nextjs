@@ -1,8 +1,27 @@
-"use client";
 import AboutMe from "./components/AboutMe";
 import ContactMe from "./components/ContactMe";
 import Navbar from "./components_/navbar";
+// import Link from "next/link";
 import Projects from "./components_/projects";
+
+// Create a client wrapper for the Projects server component
+// const ProjectsWrapper = () => {
+//   return (
+//     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+//       <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">
+//         Projects
+//       </h2>
+//       <div className="text-center">
+//         <Link 
+//           href="/projects" 
+//           className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-300"
+//         >
+//           View My Projects
+//         </Link>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default function Home() {
   return (
@@ -28,6 +47,7 @@ export default function Home() {
 
       {/* Projects Section */}
       <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-900">
+        {/* <ProjectsWrapper /> */}
         <Projects />
       </section>
 
