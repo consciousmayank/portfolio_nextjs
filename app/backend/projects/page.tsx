@@ -33,7 +33,7 @@ export default function ProjectsManagement() {
     try {
       const response = await fetch(PROJECTS_API_URL);
       if (!response.ok) {
-        throw new Error('Failed to fetch projects');
+        throw new Error('Failed to fetch projects in projects page');
       }
       const data = await response.json() as Record<string, unknown>[];
       const projectsList = data.map(item => ProjectInfo.fromJSON(item));
