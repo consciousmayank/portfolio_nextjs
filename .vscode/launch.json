@@ -1,0 +1,74 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}",
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/*": "${webRoot}/*"
+      }
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Next.js: build",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run build",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+} 
+
+
+// This configuration file includes several debug configurations that you can use to run and debug your application:
+
+// Next.js: debug server-side
+// This configuration runs your Next.js development server and allows you to debug server-side code.
+// It uses the integrated terminal to display server logs.
+// You can set breakpoints in your server-side code (like API routes and getServerSideProps functions).
+
+// Next.js: debug client-side
+// This launches Chrome and connects the debugger to your client-side code.
+// You can debug React components and client-side JavaScript.
+// Make sure your development server is already running when using this configuration.
+
+// Next.js: debug full stack
+// This is a combined configuration that starts the Next.js server and then automatically launches Chrome.
+// It allows you to debug both server-side and client-side code in a single session.
+// This is very useful for full-stack debugging workflows.
+
+// Next.js: build
+// This configuration runs the Next.js build process.
+// Useful for debugging build-time issues.
+// How to use it:
+
+// Open your project in VS Code
+// Go to the "Run and Debug" view (Ctrl+Shift+D or Cmd+Shift+D on Mac)
+// Select one of the configurations from the dropdown at the top
+// Click the green play button or press F5 to start debugging
+// The most commonly used option will likely be "Next.js: debug full stack" as it provides the most complete debugging experience.

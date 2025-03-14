@@ -13,16 +13,57 @@ export class ProjectInfo {
         return this.image;
     }
 
-    // Define interface for the JSON structure
-    static fromJSON(json: ProjectInfoJSON): ProjectInfo {
+    // Safely parse JSON or return the value if it's already an array
+    private static parseJsonOrArray(value: unknown): string[] {
+        // If it's already an array, return it
+        if (Array.isArray(value)) return value;
+        
+        // If it's a string, try to parse it
+        if (typeof value === 'string') {
+            try {
+                // Handle nested JSON strings like "["Flutter","Android Native","iOS"]"
+                let parsed = value;
+                
+                // Try to parse up to twice for nested JSON strings
+                for (let i = 0; i < 2; i++) {
+                    if (typeof parsed === 'string') {
+                        try {
+                            const attempt = JSON.parse(parsed);
+                            parsed = attempt;
+                        } catch {
+                            // If parsing fails, break the loop
+                            break;
+                        }
+                    }
+                }
+                
+                // Return the parsed array or empty array if not an array
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                // Error parsing JSON, return empty array
+                return [];
+            }
+        }
+        
+        return [];
+    }
+
+    // Define interface for the JSON structure from the database
+    static fromJSON(json: Record<string, unknown>): ProjectInfo {
+        console.log(json);
+        
+        // Handle both string and array formats
+        const technologies = this.parseJsonOrArray(json.technologiesUsed);
+        const links = this.parseJsonOrArray(json.links);
+        
         return new ProjectInfo(
-            json.id,
-            json.title,
-            json.description,
-            JSON.parse(json.technologiesUsed),
-            json.role,
-            JSON.parse(json.links),
-            json.image
+            Number(json.id) || 0,
+            String(json.title) || '',
+            String(json.description) || '',
+            technologies,
+            String(json.role) || '',
+            links,
+            String(json.image) || ''
         );
     }
 
@@ -39,13 +80,5 @@ export class ProjectInfo {
     }
 }
 
-// Interface for the JSON structure coming from the database
-interface ProjectInfoJSON {
-    id: number;
-    title: string;
-    description: string;
-    technologiesUsed: string; // JSON string of string[]
-    role: string;
-    links: string; // JSON string of string[]
-    image: string;
-}
+// We're using 'any' type for the fromJSON parameter 
+// since we need to handle different data structures from Prisma
