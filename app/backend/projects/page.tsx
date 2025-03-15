@@ -31,52 +31,48 @@ async function createProject(formData: FormData) {
   'use server';
   
   try {
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    const role = formData.get('role') as string;
-    const image = formData.get('image') as string;
+    // Parse and validate form fields
+    const title = String(formData.get('title') || '').trim();
+    const description = String(formData.get('description') || '').trim();
+    const role = String(formData.get('role') || '').trim();
+    const image = String(formData.get('image') || '').trim();
     
-    // Get all technologies (they'll be named 'tech-0', 'tech-1', etc.)
+    // Get all technologies
     const technologiesUsed: string[] = [];
-    formData.forEach((value, key) => {
-      if (key.startsWith('tech-') && value.toString().trim()) {
-        technologiesUsed.push(value.toString().trim());
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith('tech-') && String(value).trim()) {
+        technologiesUsed.push(String(value).trim());
       }
-    });
-    
-    // Get all links (they'll be named 'link-0', 'link-1', etc.)
-    const links: string[] = [];
-    formData.forEach((value, key) => {
-      if (key.startsWith('link-') && value.toString().trim()) {
-        links.push(value.toString().trim());
-      }
-    });
-
-    // Validate required fields
-    if (!title || !description || !role) {
-      throw new Error('Missing required fields');
     }
     
-    // Create the project
-    const result = await prisma.projectInfo.create({
+    // Get all links
+    const links: string[] = [];
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith('link-') && String(value).trim()) {
+        links.push(String(value).trim());
+      }
+    }
+
+    // Validate required fields
+    if (!title) throw new Error('Title is required');
+    if (!description) throw new Error('Description is required');
+    if (!role) throw new Error('Role is required');
+    
+    // Create the project with safe JSON serialization
+    await prisma.projectInfo.create({
       data: {
         title,
         description,
         role,
-        image: image || '',
-        technologiesUsed: JSON.stringify(technologiesUsed),
-        links: JSON.stringify(links)
+        image,
+        technologiesUsed: JSON.stringify(technologiesUsed || []),
+        links: JSON.stringify(links || [])
       }
     });
-    
-    if (!result) {
-      throw new Error('Failed to create project: Database operation returned no result');
-    }
     
     revalidatePath('/backend/projects');
   } catch (error) {
     console.error("Error creating project:", error);
-    // Be more specific about the error type
     if (error instanceof Error) {
       throw new Error(`Failed to create project: ${error.message}`);
     } else {
@@ -90,41 +86,38 @@ async function updateProject(formData: FormData) {
   'use server';
   
   try {
-    const id = parseInt(formData.get('id') as string);
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    const role = formData.get('role') as string;
-    const image = formData.get('image') as string;
+    // Parse and validate ID
+    const idValue = formData.get('id');
+    if (!idValue) throw new Error('Project ID is required');
+    const id = parseInt(String(idValue).trim(), 10);
+    if (isNaN(id) || id <= 0) throw new Error('Invalid project ID');
+
+    // Parse and validate form fields
+    const title = String(formData.get('title') || '').trim();
+    const description = String(formData.get('description') || '').trim();
+    const role = String(formData.get('role') || '').trim();
+    const image = String(formData.get('image') || '').trim();
     
     // Get all technologies
     const technologiesUsed: string[] = [];
-    formData.forEach((value, key) => {
-      if (key.startsWith('tech-') && value.toString().trim()) {
-        technologiesUsed.push(value.toString().trim());
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith('tech-') && String(value).trim()) {
+        technologiesUsed.push(String(value).trim());
       }
-    });
+    }
     
     // Get all links
     const links: string[] = [];
-    formData.forEach((value, key) => {
-      if (key.startsWith('link-') && value.toString().trim()) {
-        links.push(value.toString().trim());
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith('link-') && String(value).trim()) {
+        links.push(String(value).trim());
       }
-    });
+    }
 
     // Validate required fields
-    if (!title || !description || !role) {
-      throw new Error('Missing required fields');
-    }
-    
-    // Check if project exists
-    const existingProject = await prisma.projectInfo.findUnique({
-      where: { id }
-    });
-    
-    if (!existingProject) {
-      throw new Error('Project not found');
-    }
+    if (!title) throw new Error('Title is required');
+    if (!description) throw new Error('Description is required');
+    if (!role) throw new Error('Role is required');
     
     // Update the project
     await prisma.projectInfo.update({
@@ -133,17 +126,20 @@ async function updateProject(formData: FormData) {
         title,
         description,
         role,
-        image: image || '',
-        technologiesUsed: JSON.stringify(technologiesUsed),
-        links: JSON.stringify(links)
+        image,
+        technologiesUsed: JSON.stringify(technologiesUsed || []),
+        links: JSON.stringify(links || [])
       }
     });
     
     revalidatePath('/backend/projects');
   } catch (error) {
     console.error("Error updating project:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`Failed to update project: ${errorMessage}`);
+    if (error instanceof Error) {
+      throw new Error(`Failed to update project: ${error.message}`);
+    } else {
+      throw new Error('Failed to update project: Unknown error occurred');
+    }
   }
 }
 
@@ -153,39 +149,21 @@ async function deleteProject(formData: FormData) {
   
   try {
     const idValue = formData.get('id');
+    if (!idValue) throw new Error('Project ID is required');
     
-    if (!idValue) {
-      throw new Error('Project ID is required');
-    }
-    
-    const id = parseInt(idValue.toString());
-    
-    if (isNaN(id)) {
-      throw new Error('Invalid project ID format');
-    }
-    
-    // Check if project exists
-    const existingProject = await prisma.projectInfo.findUnique({
-      where: { id }
-    });
-    
-    if (!existingProject) {
-      throw new Error(`Project with ID ${id} not found`);
-    }
+    // Parse and validate ID
+    const idString = String(idValue).trim();
+    const id = parseInt(idString, 10);
+    if (isNaN(id) || id <= 0) throw new Error('Invalid project ID');
     
     // Delete the project
-    const result = await prisma.projectInfo.delete({
+    await prisma.projectInfo.delete({
       where: { id }
     });
-    
-    if (!result) {
-      throw new Error('Failed to delete project: Database operation returned no result');
-    }
     
     revalidatePath('/backend/projects');
   } catch (error) {
     console.error("Error deleting project:", error);
-    // Be more specific about the error type
     if (error instanceof Error) {
       throw new Error(`Failed to delete project: ${error.message}`);
     } else {

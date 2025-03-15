@@ -1,6 +1,41 @@
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+// Use a global variable to prevent multiple instances in development
+declare global {
+  var prisma: PrismaClient | undefined
+}
+
+// Create a prisma client with error handling
+function createPrismaClient() {
+  try {
+    const client = new PrismaClient({
+      log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    })
+    
+    // Add middleware for better error handling
+    client.$use(async (params, next) => {
+      try {
+        return await next(params)
+      } catch (error) {
+        console.error(`Prisma ${params.model}.${params.action} error:`, error)
+        throw error
+      }
+    })
+    
+    return client
+  } catch (error) {
+    console.error("Failed to create Prisma client:", error)
+    throw new Error("Database connection failed")
+  }
+}
+
+// Use global variable in development to prevent hot-reload issues
+const prisma = global.prisma || createPrismaClient()
+
+// In development, attach to global to prevent multiple instances
+if (process.env.NODE_ENV === 'development') {
+  global.prisma = prisma
+}
 
 export default prisma
 

@@ -45,7 +45,6 @@
         "action": "debugWithChrome",
         "webRoot": "${workspaceFolder}"
       },
-      "console": "integratedTerminal"
     },
     {
       "name": "Next.js: build",
@@ -53,7 +52,6 @@
       "request": "launch",
       "command": "npm run build",
       "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal"
     }
   ]
 } 
