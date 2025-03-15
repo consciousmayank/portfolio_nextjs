@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getProjectsUsingApi } from "../actions/projectActions";
 
 // Project type definition
 interface Project {
@@ -38,10 +37,10 @@ export default function Projects() {
     async function fetchProjects() {
       try {
         setLoading(true);
-        const result = await getProjectsUsingApi();
-        
-        if (result.success && result.data) {
-          setProjects(result.data);
+        const result = await fetch("/api/v1/projects");
+        const data = await result.json();
+        if (data.success && data.data) {
+          setProjects(data.data);
         } else {
           setError("Failed to load projects");
         }

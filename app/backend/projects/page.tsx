@@ -4,16 +4,16 @@ import prisma from "@/app/prisma-db";
 import ProjectTable from "./components/ProjectTable";
 import AddProjectButton from "./components/AddProjectButton";
 import { ProjectInfo } from "@/app/classes/ProjectInfo";
-import { getProjectsUsingApi } from "@/app/actions/projectActions";
 import { revalidatePath } from "next/cache";
 
 // Server action to fetch all projects
 async function getProjects() {
   try {
 
-    const result = await getProjectsUsingApi();
+    const result = await fetch("/api/v1/projects");
+    const data = await result.json();
 
-    const projectsData = result.data;
+    const projectsData = data.data;
     
     // Transform the data to handle JSON string fields
     return projectsData.map((project: ProjectInfo) => ({
