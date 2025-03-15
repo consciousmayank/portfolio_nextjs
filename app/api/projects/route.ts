@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getAllProjects } from '../../prisma-db';
 
-export const dynamic = 'force-dynamic'; // Ensures the route is dynamically rendered
+// This tells Next.js to always render this route dynamically
+export const dynamic = 'force-dynamic';
+
+// This prevents edge-case caching issues
+export const fetchCache = 'force-no-store';
+
+// Prevent this route from being statically optimized
+export const revalidate = 0;
 
 export async function GET() {
   try {
@@ -28,7 +35,7 @@ export async function GET() {
       { 
         status: 500,
         headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
           'Pragma': 'no-cache',
           'Expires': '0'
         }

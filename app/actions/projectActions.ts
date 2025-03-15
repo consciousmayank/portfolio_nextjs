@@ -1,6 +1,11 @@
 "use server";
 
+import { unstable_noStore as noStore } from "next/cache";
+
 export async function getProjectsUsingApi() {
+  // Tell Next.js not to cache this data
+  noStore();
+  
   try {
     // Determine the base URL for the API call
     let baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -12,8 +17,8 @@ export async function getProjectsUsingApi() {
     }
 
     // Add a timestamp to the URL to prevent caching
-    // const timestamp = new Date().getTime();
-    const url = `${baseUrl}/api/projects`;
+    const timestamp = new Date().getTime();
+    const url = `${baseUrl}/api/projects?_t=${timestamp}`;
 
     // Using fetch to call the API endpoint instead of directly accessing the database
     const response = await fetch(url, {
@@ -25,8 +30,8 @@ export async function getProjectsUsingApi() {
         'Pragma': 'no-cache',
         'Expires': '0',
       },
-      // This ensures the data is fresh on each request (Next.js options)
-      cache: 'no-store',
+      // Remove the Next.js cache option that's causing problems during build
+      // cache: 'no-store',
     });
 
     if (!response.ok) {
