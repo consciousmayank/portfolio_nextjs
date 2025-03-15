@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getProjects } from "../actions/projectActions";
+import { getProjectsUsingApi } from "../actions/projectActions";
 
 // Project type definition
 interface Project {
@@ -37,7 +37,7 @@ export default function Projects() {
     async function fetchProjects() {
       try {
         setLoading(true);
-        const result = await getProjects();
+        const result = await getProjectsUsingApi();
         
         if (result.success && result.data) {
           setProjects(result.data);

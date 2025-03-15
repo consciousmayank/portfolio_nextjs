@@ -1,6 +1,6 @@
 "use server";
 
-export async function getProjects() {
+export async function getProjectsUsingApi() {
   try {
     // Determine the base URL for the API call
     let baseUrl = process.env.NEXT_PUBLIC_BASE_URL;

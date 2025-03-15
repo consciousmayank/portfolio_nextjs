@@ -3,18 +3,18 @@ import prisma from "@/app/prisma-db";
 import ProjectTable from "./components/ProjectTable";
 import AddProjectButton from "./components/AddProjectButton";
 import { ProjectInfo } from "@/app/classes/ProjectInfo";
+import { getProjectsUsingApi } from "@/app/actions/projectActions";
 
 // Server action to fetch all projects
 async function getProjects() {
   try {
-    const projectsData = await prisma.projectInfo.findMany({
-      orderBy: {
-        id: 'asc'
-      }
-    });
+
+    const result = await getProjectsUsingApi();
+
+    const projectsData = result.data;
     
     // Transform the data to handle JSON string fields
-    return projectsData.map(project => ({
+    return projectsData.map((project: ProjectInfo) => ({
       ...project,
       technologiesUsed: JSON.parse(project.technologiesUsed?.toString() || '[]'),
       links: JSON.parse(project.links?.toString() || '[]')
