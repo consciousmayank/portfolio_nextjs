@@ -17,8 +17,7 @@ export async function getProjectsUsingApi() {
     }
 
     // Add a timestamp to the URL to prevent caching
-    const timestamp = new Date().getTime();
-    const url = `${baseUrl}/api/projects?_t=${timestamp}`;
+    const url = `${baseUrl}/api/projects`;
 
     // Using fetch to call the API endpoint instead of directly accessing the database
     const response = await fetch(url, {
