@@ -38,12 +38,11 @@ export default async function Projects() {
               // className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
             >
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white text-center">
-                  Project {index + 1}
-                </h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-300">
+                <p className="mt-2 text-gray-600 dark:text-gray-300 text-2xl underline text-center">
                   {project.title}
                 </p>
+                
+                <div className="w-full h-[1px] bg-gray-900 my-4"></div>
                 <p className="mt-2 text-gray-600 dark:text-gray-300">
                   {project.description}
                 </p>
