@@ -20,7 +20,8 @@ export default function AddProjectButton({ createAction }: AddProjectButtonProps
       await createAction(formData);
       closeModal(); // Close modal after successful creation
     } catch (error) {
-      // Error will be handled by the ProjectForm component
+      console.error("Project creation failed:", error);
+      // Let the ProjectForm component handle displaying the error
       throw error;
     }
   };

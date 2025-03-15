@@ -58,7 +58,7 @@ async function createProject(formData: FormData) {
     }
     
     // Create the project
-    await prisma.projectInfo.create({
+    const result = await prisma.projectInfo.create({
       data: {
         title,
         description,
@@ -69,11 +69,19 @@ async function createProject(formData: FormData) {
       }
     });
     
+    if (!result) {
+      throw new Error('Failed to create project: Database operation returned no result');
+    }
+    
     revalidatePath('/backend/projects');
   } catch (error) {
     console.error("Error creating project:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`Failed to create project: ${errorMessage}`);
+    // Be more specific about the error type
+    if (error instanceof Error) {
+      throw new Error(`Failed to create project: ${error.message}`);
+    } else {
+      throw new Error('Failed to create project: Unknown error occurred');
+    }
   }
 }
 
@@ -144,7 +152,17 @@ async function deleteProject(formData: FormData) {
   'use server';
   
   try {
-    const id = parseInt(formData.get('id') as string);
+    const idValue = formData.get('id');
+    
+    if (!idValue) {
+      throw new Error('Project ID is required');
+    }
+    
+    const id = parseInt(idValue.toString());
+    
+    if (isNaN(id)) {
+      throw new Error('Invalid project ID format');
+    }
     
     // Check if project exists
     const existingProject = await prisma.projectInfo.findUnique({
@@ -152,19 +170,27 @@ async function deleteProject(formData: FormData) {
     });
     
     if (!existingProject) {
-      throw new Error('Project not found');
+      throw new Error(`Project with ID ${id} not found`);
     }
     
     // Delete the project
-    await prisma.projectInfo.delete({
+    const result = await prisma.projectInfo.delete({
       where: { id }
     });
+    
+    if (!result) {
+      throw new Error('Failed to delete project: Database operation returned no result');
+    }
     
     revalidatePath('/backend/projects');
   } catch (error) {
     console.error("Error deleting project:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`Failed to delete project: ${errorMessage}`);
+    // Be more specific about the error type
+    if (error instanceof Error) {
+      throw new Error(`Failed to delete project: ${error.message}`);
+    } else {
+      throw new Error('Failed to delete project: Unknown error occurred');
+    }
   }
 }
 
