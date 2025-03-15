@@ -40,11 +40,10 @@ export default function Projects() {
         setLoading(true);
         const result = await getProjectsUsingApi();
         
-        if (result?.success && Array.isArray(result.data)) {
+        if (result.success && result.data) {
           setProjects(result.data);
         } else {
-          console.error("Invalid response format:", result);
-          setError("Failed to load projects: Invalid data format");
+          setError("Failed to load projects");
         }
       } catch (err) {
         console.error("Error fetching projects:", err);

@@ -5,19 +5,12 @@ import AddProjectButton from "./components/AddProjectButton";
 import { ProjectInfo } from "@/app/classes/ProjectInfo";
 import { getProjectsUsingApi } from "@/app/actions/projectActions";
 
-// Set dynamic rendering for this route
-export const dynamic = 'force-dynamic';
-
 // Server action to fetch all projects
 async function getProjects() {
   try {
+
     const result = await getProjectsUsingApi();
 
-    if (!result?.data) {
-      console.error("No data returned from getProjectsUsingApi");
-      return [];
-    }
-    
     const projectsData = result.data;
     
     // Transform the data to handle JSON string fields
