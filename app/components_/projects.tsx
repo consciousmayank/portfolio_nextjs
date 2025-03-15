@@ -1,18 +1,9 @@
 "use client";
 
+import { ProjectInfo } from "@prisma/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-// Project type definition
-interface Project {
-  id: string | number;
-  title: string;
-  description: string;
-  role: string;
-  technologiesUsed: unknown;
-  links: unknown;
-  // Add any other fields your project has
-}
 
 // Helper function to safely parse JSON values
 const parseJsonArray = (value: unknown): string[] => {
@@ -29,7 +20,7 @@ const parseJsonArray = (value: unknown): string[] => {
 };
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ProjectInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,14 +29,14 @@ export default function Projects() {
       try {
         setLoading(true);
         const result = await fetch("/api/v1/projects");
-        const data = await result.json();
-        if (data.success && data.data) {
-          setProjects(data.data);
+        if (result.ok) {
+          const data = await result.json();
+          setProjects(data);
         } else {
-          setError("Failed to load projects");
+          setError("Fetched data from api, but it is not ok. Error while parsing data");
         }
       } catch (err) {
-        console.error("Error fetching projects:", err);
+        console.log("Error fetching projects:", err);
         setError("An error occurred while fetching projects");
       } finally {
         setLoading(false);
