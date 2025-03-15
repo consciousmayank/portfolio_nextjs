@@ -16,9 +16,22 @@
       "request": "launch",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
       "sourceMapPathOverrides": {
-        "webpack://_N_E/*": "${webRoot}/*"
-      }
+        "webpack://_N_E/*": "${webRoot}/*",
+        "webpack://node_modules/*": "${webRoot}/node_modules/*",
+        "webpack://@*/*": "${webRoot}/node_modules/@*/*",
+        "webpack://app/*": "${webRoot}/app/*",
+        "webpack:///*": "*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///src/*": "${webRoot}/src/*"
+      },
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "runtimeArgs": [
+        "--remote-debugging-port=9222",
+        "--no-first-run",
+        "--no-default-browser-check"
+      ]
     },
     {
       "name": "Next.js: debug full stack",
@@ -29,7 +42,8 @@
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",
-        "action": "debugWithChrome"
+        "action": "debugWithChrome",
+        "webRoot": "${workspaceFolder}"
       },
       "console": "integratedTerminal"
     },

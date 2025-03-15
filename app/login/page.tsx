@@ -132,7 +132,7 @@ export default function Login() {
       // For demo purposes, let's add a simple validation
       if (username === 'mayank' && password === 'NTZ/7a3!%UEn') {
         // Successful login redirects to backend page
-        router.push('/backend/projects');
+        router.push('/backend');
       } else {
         setErrors({
           general: 'Invalid username or password'

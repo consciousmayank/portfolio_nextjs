@@ -33,7 +33,12 @@ export default function ProjectsManagement() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('api/v1/projects');
+      const response = await fetch("/api/v1/projects", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch projects in projects page");
       }
@@ -42,14 +47,14 @@ export default function ProjectsManagement() {
       setProjects(projectsList);
     } catch (err) {
       console.error("Error fetching projects:", err);
-      setError(
-        "Database connection failed " + 'api/v1/projects',
-      );
+
       const errorMessage =
         err instanceof Error ? err.message : "Unknown database error";
+      console.error("Error fetching projects:", errorMessage);
+      setError(errorMessage);
       return NextResponse.json(
         {
-          error: "Database connection failed " + 'api/v1/projects',
+          error: "Api Error has come in projects route",
           message: errorMessage,
         },
         { status: 500 }
@@ -164,7 +169,7 @@ export default function ProjectsManagement() {
 
       if (isCreating) {
         // Create new project
-        response = await fetch('api/v1/projects', {
+        response = await fetch("/api/v1/projects", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
