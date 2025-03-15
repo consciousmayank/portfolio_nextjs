@@ -20,13 +20,7 @@ export async function getProjectsUsingApi() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Add cache control headers to prevent caching at all levels
-        'Cache-Control': 'no-cache, no-store, max-age=0',
-        'Pragma': 'no-cache',
-        'Expires': '0',
       },
-      // This ensures the data is fresh on each request (Next.js options)
-      cache: 'no-store',
     });
 
     if (!response.ok) {
