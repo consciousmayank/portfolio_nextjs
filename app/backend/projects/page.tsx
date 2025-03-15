@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import prisma from "@/app/prisma-db";
 import ProjectTable from "./components/ProjectTable";
 import AddProjectButton from "./components/AddProjectButton";
