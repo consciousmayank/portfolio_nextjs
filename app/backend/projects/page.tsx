@@ -9,22 +9,21 @@ import { revalidatePath } from "next/cache";
 // Server action to fetch all projects
 async function getProjects() {
   try {
-
-    const result = await fetch("/api/v1/projects");
-    const data = await result.json();
-
-    const projectsData = data.data;
-    
+    // Direct database call using Prisma
+    const projectsData = await prisma.projectInfo.findMany();
     // Transform the data to handle JSON string fields
-    return projectsData.map((project: ProjectInfo) => ({
-      ...project,
+    return projectsData.map((project) => ({
+      id: project.id,
+      title: project.title,
+      description: project.description,
+      role: project.role,
+      image: project.image,
       technologiesUsed: JSON.parse(project.technologiesUsed?.toString() || '[]'),
       links: JSON.parse(project.links?.toString() || '[]')
     }));
   } catch (error) {
     console.error("Error fetching projects:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`Failed to fetch projects: ${errorMessage}`);
+    throw new Error(`Failed to fetch projects: ${error}`);
   }
 }
 
