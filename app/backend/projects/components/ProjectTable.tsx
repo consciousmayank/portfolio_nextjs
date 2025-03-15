@@ -5,7 +5,7 @@ import { ProjectInfo } from "@/app/classes/ProjectInfo";
 import ProjectForm from "./ProjectForm";
 
 interface ProjectTableProps {
-  projects: ProjectInfo[] | any[];
+  projects: ProjectInfo[];
   updateAction: (formData: FormData) => Promise<void>;
   deleteAction: (formData: FormData) => Promise<void>;
 }

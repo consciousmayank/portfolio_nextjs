@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/app/prisma-db";
 import ProjectTable from "./components/ProjectTable";
 import AddProjectButton from "./components/AddProjectButton";
+import { ProjectInfo } from "@/app/classes/ProjectInfo";
 
 // Server action to fetch all projects
 async function getProjects() {
@@ -192,7 +193,7 @@ export default async function ProjectsManagement() {
         {/* Projects List */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <ProjectTable 
-            projects={projects} 
+            projects={projects as ProjectInfo[]} 
             updateAction={updateProject} 
             deleteAction={deleteProject}
           />
