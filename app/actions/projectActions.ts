@@ -1,11 +1,6 @@
 "use server";
 
-import { unstable_noStore as noStore } from "next/cache";
-
 export async function getProjectsUsingApi() {
-  // Tell Next.js not to cache this data
-  noStore();
-  
   try {
     // Determine the base URL for the API call
     let baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -24,13 +19,7 @@ export async function getProjectsUsingApi() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Add cache control headers to prevent caching at all levels
-        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
-        'Pragma': 'no-cache',
-        'Expires': '0',
       },
-      // Remove the Next.js cache option that's causing problems during build
-      // cache: 'no-store',
     });
 
     if (!response.ok) {
